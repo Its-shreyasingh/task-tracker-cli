@@ -1,0 +1,7 @@
+bin/
+build/
+gradle/wrapper
+gradlew
+gradlew.bat
+tasks.json
+.gradle
