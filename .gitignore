@@ -1,7 +1,0 @@
-tasks.json
-gradlew.bat
-gradlew
-gradle/wrapper
-build
-bin/main/com/tasktracker
-.gradle
