@@ -61,5 +61,3 @@ public class Task {
             return updatedAt;
         }
     }
-
-
