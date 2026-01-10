@@ -4,4 +4,5 @@ gradle/wrapper
 gradlew
 gradlew.bat
 tasks.json
-.gradle
+.gradle/
+gradle.properties

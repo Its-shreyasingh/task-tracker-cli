@@ -22,32 +22,37 @@ public class TaskTracker {
         String action=args[0];
         List<Task> tasks= loadTasks();
 
-        try{
-            switch (action) {
-    case "add" -> {
-        String desc = args[1];
-        String status=args[2];
-        addTask(tasks,desc,status);
-    }
-    case "update" -> {
-        updateTask(tasks,Integer.parseInt(args[1]), args[2]);
-    }
-    case "delete" -> deleteTask(tasks,Integer.parseInt(args[1]));
-    case "list"   -> listTasks(tasks,args.length > 1 ? args[1] : "all");
-    default       -> System.out.println("Unknown command!");
-}
-        } catch(Exception e)
+        try
+        {
+            switch (action)
+            {
+            case "add" ->
+            {
+            String desc = args[1];
+            String status=args[2];
+            addTask(tasks,desc,status);
+            }
+            case "update" -> updateTask(tasks,Integer.parseInt(args[1]), args[2]);
+            case "delete" -> deleteTask(tasks,Integer.parseInt(args[1]));
+            case "list"   -> listTasks(tasks,args.length > 1 ? args[1] : "all");
+            case "mark-in-progress","mark-done" -> changeStatus(tasks,Integer.parseInt(args[1]),action);
+            default       -> System.out.println("Unknown command!");
+            }
+        }
+        catch(Exception e)
         {
             System.err.println("Error: Invalid arguments for"+ action);
         }
     }
+
     private static void addTask(List<Task> tasks,String desc,String status)
     {
-        int id=tasks.isEmpty() ? 1:tasks.get(tasks.size()-1).getId()+1;
+        int id=tasks.isEmpty() ? 1: tasks.get(tasks.size()-1).getId()+1;
         tasks.add(new Task(id,desc,status));
         saveTasks(tasks);
         System.out.println("Tasks added successfully (ID: " + id + ")");
     }
+
     private static void listTasks(List<Task> tasks,String filter)
     {
         System.out.println("ID | Status |Description|Created At");
@@ -56,6 +61,7 @@ public class TaskTracker {
             .filter(t -> filter.equalsIgnoreCase("all")||t.getStatus().equalsIgnoreCase(filter))
             .forEach(t ->System.out.printf("%-3d | %-11s |%s%n",t.getId(),t.getStatus(),t.getDescription()));
     }
+
     private static void changeStatus(List<Task> tasks,int id,String action)
     {
         String newStatus=action.replace("mark-","");
@@ -63,7 +69,9 @@ public class TaskTracker {
         saveTasks(tasks);
         System.out.println("Task" + id + "updated to" + newStatus);
     }
-    private static void updateTask(List<Task> tasks, int id, String newDescription) {
+
+    private static void updateTask(List<Task> tasks, int id, String newDescription) 
+    {
     tasks.stream()
         .filter(t -> t.getId() == id)
         .findFirst()
@@ -74,21 +82,27 @@ public class TaskTracker {
                 System.out.println("Task " + id + " updated successfully.");
             },
             () -> System.out.println("Error: Task " + id + " not found.")
-        );}
+        );
+    }
 
     private static void deleteTask(List<Task> tasks, int id)
     {
     boolean removed = tasks.removeIf(t -> t.getId() == id);
-    if (removed) {
+    if (removed)
+        {
         saveTasks(tasks);
         System.out.println("Task " + id + " deleted successfully.");
-    } else {
+        }
+    else
+        {
         System.out.println("Error: Task " + id + " not found.");
+        }
     }
-}
+
     private static void saveTasks(List<Task>tasks)
     {
-        try{
+        try
+        {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH),tasks);
         }
         catch(Exception e)
@@ -96,15 +110,20 @@ public class TaskTracker {
             System.err.println("Error saving tasks:" +e.getMessage());
         }
     }
+
     private static List<Task> loadTasks()
     {
-        try {
+        try
+        {
             File file=new File(FILE_PATH);
             if(!file.exists())
+            {
                 return new ArrayList<>();
+            }
                 return new ArrayList<>(Arrays.asList(mapper.readValue(file,Task[].class)));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             return new ArrayList<>();
         }
     }

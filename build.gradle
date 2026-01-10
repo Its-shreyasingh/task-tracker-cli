@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'com.tasktracker'
@@ -13,10 +14,13 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 }
-
+application{
+    mainClass='com.tasktracker.TaskTracker'
+}
 // Optional: Helps run the app via gradle
 tasks.withType(JavaCompile) {
-    options.release = 17
+    options.encoding ='UTF-8'
+    options.release = 21
 }
 
 
